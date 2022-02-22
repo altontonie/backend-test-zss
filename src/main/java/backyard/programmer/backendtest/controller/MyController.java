@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/books")  // http://localhost:8181/books
@@ -26,8 +28,9 @@ public class MyController {
     }
 
     @GetMapping(path = "/")
-    public String getAllBooks(){
-        return "get all books";
+    public List<BookResponse> getAllBooks(){
+        List<BookResponse> books = bookService.getAllBooks();
+        return books;
     }
 
     @GetMapping(path = "/category")

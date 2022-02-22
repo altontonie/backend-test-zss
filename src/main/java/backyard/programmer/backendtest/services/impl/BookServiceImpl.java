@@ -48,6 +48,6 @@ public class BookServiceImpl implements BookService {
         BookDto bookDto = new BookDto();
         BookEntity bookEntity = bookRepo.findByAssignedBookId(id);
         BeanUtils.copyProperties(bookEntity,bookDto);
-        return null;
+        return bookDto;
     }
 }
