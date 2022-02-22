@@ -5,35 +5,35 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping
+@RequestMapping("books")  // http://localhost:8181/books
 public class MyController {
 
-    @GetMapping
+    @GetMapping(path = "/{id}")
     public String GetBook(){
         return "get a book";
     }
 
-    @GetMapping
+    @GetMapping(path = "/")
     public String GetAllBooks(){
         return "get all books";
     }
 
-    @GetMapping
+    @GetMapping(path = "/category")
     public String GetCategory(){
         return "get categories";
     }
 
-    @PostMapping
+    @PostMapping(path = "/")
     public String AddBook(){
         return "add book";
     }
 
-    @PostMapping
+    @PostMapping(path = "/purchase")
     public String Purchase(){
         return "purchase book";
     }
 
-    @PutMapping
+    @PutMapping(path = "/{id}")
     public String UpdateBook(){
         return "update book";
     }
