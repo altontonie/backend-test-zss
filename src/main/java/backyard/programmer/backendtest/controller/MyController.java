@@ -1,12 +1,21 @@
 package backyard.programmer.backendtest.controller;
 
+import backyard.programmer.backendtest.dto.BookDto;
+import backyard.programmer.backendtest.model.request.BookRequest;
+import backyard.programmer.backendtest.model.response.BookResponse;
+import backyard.programmer.backendtest.services.BookService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("books")  // http://localhost:8181/books
+@RequestMapping("/books")  // http://localhost:8181/books
 public class MyController {
+
+    @Autowired
+    BookService bookService;
 
     @GetMapping(path = "/{id}")
     public String GetBook(){
@@ -24,8 +33,13 @@ public class MyController {
     }
 
     @PostMapping(path = "/")
-    public String AddBook(){
-        return "add book";
+    public BookResponse AddBook(@RequestBody BookRequest bookDetails){
+        BookResponse bookResponse = new BookResponse();
+        BookDto bookDto = new BookDto();
+        BeanUtils.copyProperties(bookDetails,bookDto);
+        BookDto createdBook = bookService.createBook(bookDto);
+        BeanUtils.copyProperties(createdBook,bookResponse);
+        return bookResponse;
     }
 
     @PostMapping(path = "/purchase")
