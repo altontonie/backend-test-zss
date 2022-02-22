@@ -42,4 +42,12 @@ public class BookServiceImpl implements BookService {
 
         return returnBook;
     }
+
+    @Override
+    public BookDto getBookById(String id) {
+        BookDto bookDto = new BookDto();
+        BookEntity bookEntity = bookRepo.findByAssignedBookId(id);
+        BeanUtils.copyProperties(bookEntity,bookDto);
+        return null;
+    }
 }

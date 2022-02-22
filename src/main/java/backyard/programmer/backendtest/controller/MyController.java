@@ -18,22 +18,25 @@ public class MyController {
     BookService bookService;
 
     @GetMapping(path = "/{id}")
-    public String GetBook(){
-        return "get a book";
+    public BookResponse getBook(@PathVariable String id){
+        BookResponse bookResponse = new BookResponse();
+        BookDto bookDto = bookService.getBookById(id);
+        BeanUtils.copyProperties(bookDto,bookResponse);
+        return bookResponse;
     }
 
     @GetMapping(path = "/")
-    public String GetAllBooks(){
+    public String getAllBooks(){
         return "get all books";
     }
 
     @GetMapping(path = "/category")
-    public String GetCategory(){
+    public String getCategory(){
         return "get categories";
     }
 
     @PostMapping(path = "/")
-    public BookResponse AddBook(@RequestBody BookRequest bookDetails){
+    public BookResponse addBook(@RequestBody BookRequest bookDetails){
         BookResponse bookResponse = new BookResponse();
         BookDto bookDto = new BookDto();
         BeanUtils.copyProperties(bookDetails,bookDto);
@@ -43,12 +46,12 @@ public class MyController {
     }
 
     @PostMapping(path = "/purchase")
-    public String Purchase(){
+    public String purchase(){
         return "purchase book";
     }
 
     @PutMapping(path = "/{id}")
-    public String UpdateBook(){
+    public String updateBook(){
         return "update book";
     }
 
