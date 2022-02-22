@@ -14,7 +14,6 @@ public class CategoryEntity {
     private long id;
 
     @Column(nullable = false)
-    @OneToOne
     private String title;
 
     public CategoryEntity(String title) {

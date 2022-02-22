@@ -23,7 +23,6 @@ public class BookEntity {
     private String description;
     private String price;
 
-    @Column(nullable = false)
     @OneToOne
     private CategoryEntity categoryEntity;
 }
