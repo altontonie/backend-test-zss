@@ -23,7 +23,4 @@ public class CategoryEntity {
     @JoinTable(name = "book_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
     private Collection<BookEntity> bookEntity = new ArrayList<BookEntity>();
 
-    public CategoryEntity(String title) {
-        this.title = title;
-    }
 }
