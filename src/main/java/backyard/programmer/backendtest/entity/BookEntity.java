@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "Books")
 @Data
@@ -12,10 +13,10 @@ public class BookEntity {
 
     @Id
     @GeneratedValue
-    private long id;
+    private long bookId;
 
     @Column(nullable = false)
-    private String bookId;
+    private String assignedBookId;
 
     @Column(nullable = false)
     private String title;
@@ -23,6 +24,7 @@ public class BookEntity {
     private String description;
     private String price;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private CategoryEntity categoryEntity;
 }

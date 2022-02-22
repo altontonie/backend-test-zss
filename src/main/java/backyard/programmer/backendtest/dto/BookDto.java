@@ -14,11 +14,11 @@ public class BookDto implements Serializable {
     @Setter(AccessLevel.NONE)
     private static final long serialVersionUID = 987412365410321L;
 
-    private long id;
-    private String bookId;
+    private long bookId;
+    private String assignedBookId;
     private String title;
     private String description;
     private String price;
     private String category;
-    private long categoryId;
+    private long categoryEntity;
 }
