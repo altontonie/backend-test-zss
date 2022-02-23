@@ -110,24 +110,22 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto updateBook(String id, BookRequest bookDetails) {
         CategoryDto returnBook = new CategoryDto();
-//        CategoryEntity titleId = new CategoryEntity();
         CategoryDto addCategory = new CategoryDto();
         BookEntity bookEntity = bookRepo.findByAssignedBookId(id);
         if(bookEntity == null){
             throw new RuntimeException("Invalid book id");
         }
-//        bookEntity.setTitle(bookDetails.getBook().getTitle());
-//        bookEntity.setDescription(bookDetails.getBook().getDescription());
-//        bookEntity.setPrice(bookDetails.getBook().getPrice());
 
         if(categoryRepo.findByCategoryTitle(bookDetails.getCategoryTitle()) == null) {
             addCategory = addCategory(new CategoryDto(bookDetails.getCategoryTitle()));
         }
 
+        BeanUtils.copyProperties(bookEntity,addCategory.getBookDto());
         addCategory.getBookDto().setPrice(bookDetails.getBook().getPrice());
         addCategory.getBookDto().setDescription(bookDetails.getBook().getDescription());
         addCategory.getBookDto().setTitle(bookDetails.getBook().getTitle());
         addCategory.getBookDto().setAssignedBookId(id);
+        addCategory.getBookDto().setBookId(bookEntity.getBookId());
 
         CategoryEntity categoryEntity = categoryRepo.findByCategoryTitle(bookDetails.getCategoryTitle());
 
