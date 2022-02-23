@@ -24,6 +24,6 @@ public class BookEntity {
     private double price;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id",updatable = true)
     private CategoryEntity categoryEntity;
 }

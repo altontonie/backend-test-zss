@@ -2,6 +2,9 @@ package backyard.programmer.backendtest.controller;
 
 import backyard.programmer.backendtest.dto.BookDto;
 import backyard.programmer.backendtest.dto.CategoryDto;
+import backyard.programmer.backendtest.entity.BookEntity;
+import backyard.programmer.backendtest.entity.CategoryEntity;
+import backyard.programmer.backendtest.model.Book;
 import backyard.programmer.backendtest.model.ReturnException;
 import backyard.programmer.backendtest.model.request.BookRequest;
 import backyard.programmer.backendtest.model.request.CategoryRequest;
@@ -119,9 +122,14 @@ public class MyController {
         }
     }
 
-    @PutMapping(path = "/{id}")
-    public String updateBook(){
-        return "update book";
+    @PutMapping(path = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BookResponse> updateBook(@PathVariable String id,@RequestBody BookRequest bookDetails) {
+        BookResponse bookResponse = new BookResponse();
+        CategoryDto categoryDto = categoryService.updateBook(id,bookDetails);
+
+        BeanUtils.copyProperties(categoryDto,bookResponse);
+        return ResponseEntity.ok(bookResponse);
     }
 
 }

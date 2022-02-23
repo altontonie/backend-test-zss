@@ -4,6 +4,7 @@ import backyard.programmer.backendtest.dto.BookDto;
 import backyard.programmer.backendtest.dto.CategoryDto;
 import backyard.programmer.backendtest.entity.BookEntity;
 import backyard.programmer.backendtest.entity.CategoryEntity;
+import backyard.programmer.backendtest.model.request.BookRequest;
 import backyard.programmer.backendtest.repository.BookRepo;
 import backyard.programmer.backendtest.repository.CategoryRepo;
 import backyard.programmer.backendtest.services.CategoryService;
@@ -104,5 +105,41 @@ public class CategoryServiceImpl implements CategoryService {
             showBooks.add(categoryDto);
         }
         return showBooks;
+    }
+
+    @Override
+    public CategoryDto updateBook(String id, BookRequest bookDetails) {
+        CategoryDto returnBook = new CategoryDto();
+//        CategoryEntity titleId = new CategoryEntity();
+        CategoryDto addCategory = new CategoryDto();
+        BookEntity bookEntity = bookRepo.findByAssignedBookId(id);
+        if(bookEntity == null){
+            throw new RuntimeException("Invalid book id");
+        }
+//        bookEntity.setTitle(bookDetails.getBook().getTitle());
+//        bookEntity.setDescription(bookDetails.getBook().getDescription());
+//        bookEntity.setPrice(bookDetails.getBook().getPrice());
+
+        if(categoryRepo.findByCategoryTitle(bookDetails.getCategoryTitle()) == null) {
+            addCategory = addCategory(new CategoryDto(bookDetails.getCategoryTitle()));
+        }
+
+        addCategory.getBookDto().setPrice(bookDetails.getBook().getPrice());
+        addCategory.getBookDto().setDescription(bookDetails.getBook().getDescription());
+        addCategory.getBookDto().setTitle(bookDetails.getBook().getTitle());
+        addCategory.getBookDto().setAssignedBookId(id);
+
+        CategoryEntity categoryEntity = categoryRepo.findByCategoryTitle(bookDetails.getCategoryTitle());
+
+        BookEntity updateBook = new BookEntity();
+        BeanUtils.copyProperties(addCategory.getBookDto(),updateBook);
+        updateBook.setCategoryEntity(categoryEntity);
+
+        final BookEntity updatedBook = bookRepo.save(updateBook);
+        BeanUtils.copyProperties(updatedBook,returnBook.getBookDto());
+        returnBook.setCategoryId(categoryEntity.getCategoryId());
+        returnBook.setCategoryTitle(categoryEntity.getCategoryTitle());
+        returnBook.getBookDto().setCategoryId(categoryEntity.getCategoryId());
+        return returnBook;
     }
 }
