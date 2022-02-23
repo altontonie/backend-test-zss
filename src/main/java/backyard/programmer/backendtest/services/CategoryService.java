@@ -20,4 +20,6 @@ public interface CategoryService {
     List<CategoryDto> getAllBooks();
 
     CategoryDto updateBook(String id, BookRequest bookDetails);
+
+    List<CategoryDto> getAllBooksByCategory(String title);
 }

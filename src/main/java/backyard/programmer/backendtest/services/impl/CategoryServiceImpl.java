@@ -87,8 +87,6 @@ public class CategoryServiceImpl implements CategoryService {
         categoryDto.setCategoryTitle(bookEntity.getCategoryEntity().getCategoryTitle());
         categoryDto.getBookDto().setCategoryId(bookEntity.getCategoryEntity().getCategoryId());
 
-        /*Optional<CategoryEntity> bookTitle = categoryRepo.findById(categoryDto.getBookDto().getCategoryId());
-        categoryDto.setCategoryId(bookTitle.get().getCategoryId());*/
         return categoryDto;
     }
 
@@ -139,5 +137,21 @@ public class CategoryServiceImpl implements CategoryService {
         returnBook.setCategoryTitle(categoryEntity.getCategoryTitle());
         returnBook.getBookDto().setCategoryId(categoryEntity.getCategoryId());
         return returnBook;
+    }
+
+    @Override
+    public List<CategoryDto> getAllBooksByCategory(String title) {
+        List<CategoryDto> showBooks = new ArrayList<>();
+        CategoryEntity categoryEntity = categoryRepo.findByCategoryTitle(title);
+        List<BookEntity> books = bookRepo.findByCategoryEntity(categoryEntity);
+        for (BookEntity book:books) {
+            CategoryDto categoryDto = new CategoryDto();
+            BeanUtils.copyProperties(book,categoryDto.getBookDto());
+            categoryDto.setCategoryTitle(book.getCategoryEntity().getCategoryTitle());
+            categoryDto.getBookDto().setCategoryId(book.getCategoryEntity().getCategoryId());
+
+            showBooks.add(categoryDto);
+        }
+        return showBooks;
     }
 }

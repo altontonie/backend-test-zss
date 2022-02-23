@@ -76,6 +76,20 @@ public class MyController {
         return categories;
     }
 
+    @GetMapping(path = "/category/{title}")
+    public List<BookResponse> getBookByCategory(@PathVariable String title){
+        List<BookResponse> books = new ArrayList<>();
+        List<CategoryDto> categoryDtos = categoryService.getAllBooksByCategory(title);
+        for (CategoryDto book :
+                categoryDtos) {
+            BookResponse theBook = new BookResponse();
+            BeanUtils.copyProperties(book,theBook);
+            books.add(theBook);
+        }
+        return books;
+
+    }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public BookResponse addBook(@RequestBody BookRequest bookDetails){
         BookResponse bookResponse = new BookResponse();

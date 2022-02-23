@@ -26,4 +26,5 @@ public class BookEntity {
     @ManyToOne
     @JoinColumn(name = "category_id",updatable = true)
     private CategoryEntity categoryEntity;
+
 }
