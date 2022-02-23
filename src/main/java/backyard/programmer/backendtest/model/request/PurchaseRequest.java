@@ -26,7 +26,7 @@ public class PurchaseRequest {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         String dateString = format.format(new Date());
         try {
-            Date date = format.parse (String.valueOf(LocalDate.now()));
+            Date date = format.parse (dateString);
             this.created = date;
         } catch (ParseException e) {
             e.printStackTrace();

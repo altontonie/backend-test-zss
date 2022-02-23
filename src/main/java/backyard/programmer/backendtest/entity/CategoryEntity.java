@@ -8,19 +8,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Category")
 @Data
-@NoArgsConstructor
 public class CategoryEntity {
     @Id
-    @GeneratedValue
+    @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "jpaPkSeq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jpaPkSeq")
     private long categoryId;
 
-    @Column(nullable = false)
-    private String title;
+    private String categoryTitle;
 
     @OneToMany(mappedBy = "categoryEntity",cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "book_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
+    //@JoinTable(name = "book_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
     private Collection<BookEntity> bookEntity = new ArrayList<BookEntity>();
 
 }

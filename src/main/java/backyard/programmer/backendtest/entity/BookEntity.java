@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity(name = "Books")
 @Data
@@ -22,7 +21,7 @@ public class BookEntity {
     private String title;
 
     private String description;
-    private String price;
+    private double price;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

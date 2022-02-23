@@ -2,6 +2,7 @@ package backyard.programmer.backendtest.controller;
 
 import backyard.programmer.backendtest.dto.BookDto;
 import backyard.programmer.backendtest.dto.CategoryDto;
+import backyard.programmer.backendtest.model.ReturnException;
 import backyard.programmer.backendtest.model.request.BookRequest;
 import backyard.programmer.backendtest.model.request.CategoryRequest;
 import backyard.programmer.backendtest.model.request.PurchaseBook;
@@ -12,11 +13,14 @@ import backyard.programmer.backendtest.model.response.PurchaseResponse;
 import backyard.programmer.backendtest.services.BookService;
 import backyard.programmer.backendtest.services.CategoryService;
 import backyard.programmer.backendtest.services.PaymentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,17 +42,17 @@ public class MyController {
     @GetMapping(path = "/{id}")
     public BookResponse getBook(@PathVariable String id){
         BookResponse bookResponse = new BookResponse();
-        BookDto bookDto = bookService.getBookById(id);
-        BeanUtils.copyProperties(bookDto,bookResponse);
+        CategoryDto categoryDto = categoryService.getBookById(id);
+        BeanUtils.copyProperties(categoryDto,bookResponse);
         return bookResponse;
     }
 
-    @GetMapping(path = "/")
+    @GetMapping()
     public List<BookResponse> getAllBooks(){
         List<BookResponse> books = new ArrayList<>();
-        List<BookDto> bookDtos = bookService.getAllBooks();
-        for (BookDto book :
-                bookDtos) {
+        List<CategoryDto> categoryDtos = categoryService.getAllBooks();
+        for (CategoryDto book :
+                categoryDtos) {
             BookResponse theBook = new BookResponse();
             BeanUtils.copyProperties(book,theBook);
             books.add(theBook);
@@ -69,12 +73,17 @@ public class MyController {
         return categories;
     }
 
-    @PostMapping(path = "/")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public BookResponse addBook(@RequestBody BookRequest bookDetails){
         BookResponse bookResponse = new BookResponse();
+        CategoryDto categoryDto = new CategoryDto();
         BookDto bookDto = new BookDto();
-        BeanUtils.copyProperties(bookDetails,bookDto);
-        BookDto createdBook = bookService.createBook(bookDto);
+        BeanUtils.copyProperties(bookDetails,categoryDto);
+        BeanUtils.copyProperties(bookDetails.getBook(),bookDto);
+        categoryDto.getBookDto().setTitle(bookDto.getTitle());
+        categoryDto.getBookDto().setDescription(bookDto.getDescription());
+        categoryDto.getBookDto().setPrice(bookDto.getPrice());
+        CategoryDto createdBook = categoryService.createBook(categoryDto);
         BeanUtils.copyProperties(createdBook,bookResponse);
         return bookResponse;
     }
@@ -90,11 +99,24 @@ public class MyController {
     }
 
     @PostMapping(path = "/purchase")
-    public PurchaseResponse purchase(@RequestBody PurchaseBook purchaseBook){
+    public Object purchase(@RequestBody PurchaseBook purchaseBook){
         PurchaseRequest purchase = new PurchaseRequest();
         purchase.getCard().setId(purchaseBook.getId());
-        PurchaseResponse response = paymentService.purchase(purchase);
-        return response;
+        try {
+            PurchaseResponse response = paymentService.purchase(purchase);
+            return response;
+        }catch (HttpClientErrorException Ex){
+            String body = ResponseEntity.status(Ex.getRawStatusCode()).headers(Ex.getResponseHeaders())
+                    .body(Ex.getResponseBodyAsString()).getBody();
+            try{
+                ReturnException returnException = new ObjectMapper().readValue(body,ReturnException.class);
+                return returnException;
+            }catch (Exception ex){
+                log.info("############# FAILED TO CAPTURE BODY");
+                log.info("############# {}",body.toString());
+                return null;
+            }
+        }
     }
 
     @PutMapping(path = "/{id}")

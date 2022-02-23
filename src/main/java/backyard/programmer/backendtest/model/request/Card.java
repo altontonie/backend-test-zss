@@ -2,24 +2,18 @@ package backyard.programmer.backendtest.model.request;
 
 import lombok.Data;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Data
 public class Card {
     private String id;
-    private Date expiry;
+    private LocalDate expiry;
 
     public Card() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = format.format( new Date()   );
-        try {
-            Date date = format.parse ( "2022-02-22" );
-            this.expiry = date;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+        LocalDate date = LocalDate.parse("2022-02-22", formatter);
+        this.expiry = date;
     }
 }

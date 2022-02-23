@@ -4,10 +4,12 @@ import backyard.programmer.backendtest.model.request.PurchaseRequest;
 import backyard.programmer.backendtest.model.response.PurchaseResponse;
 import backyard.programmer.backendtest.services.PaymentService;
 import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
+@Service
 public class PaymentServiceImpl implements PaymentService {
     @Override
     public PurchaseResponse purchase(PurchaseRequest purchase) {

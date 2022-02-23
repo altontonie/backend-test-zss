@@ -1,11 +1,11 @@
 package backyard.programmer.backendtest.model.request;
 
+import backyard.programmer.backendtest.entity.BookEntity;
+import backyard.programmer.backendtest.model.Book;
 import lombok.Data;
 
 @Data
 public class BookRequest {
-    private String title;
-    private String description;
-    private String price;
-    private String category;
+    private String categoryTitle;
+    private Book book;
 }

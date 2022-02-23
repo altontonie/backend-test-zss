@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 
 @Data
 public class BookDto implements Serializable {
@@ -14,11 +13,9 @@ public class BookDto implements Serializable {
     @Setter(AccessLevel.NONE)
     private static final long serialVersionUID = 987412365410321L;
 
-    private long bookId;
+    private long categoryId;
     private String assignedBookId;
     private String title;
     private String description;
-    private String price;
-    private String category;
-    private long categoryEntity;
+    private double price;
 }

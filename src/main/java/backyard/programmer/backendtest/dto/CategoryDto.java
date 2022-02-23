@@ -11,10 +11,12 @@ public class CategoryDto implements Serializable {
     @Setter(AccessLevel.NONE)
     private static final long serialVersionUID = 525252365410321L;
 
-    private String categoryId;
-    private String title;
+    private long categoryId;
+    private String categoryTitle;
+    private BookDto bookDto = new BookDto();
 
     public CategoryDto(String category) {
-        this.title = category;
+//        this.categoryId = 1;
+        this.categoryTitle = category;
     }
 }
