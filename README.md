@@ -15,6 +15,7 @@ purchase request Object:
   },
   "categoryTitle": "string"
 }
+You can find the id for a Book you created from the Response body
 
 # for adding a category:
 {
