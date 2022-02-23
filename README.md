@@ -32,3 +32,7 @@ you can change all the details of the book
   },
   "categoryTitle": "string"
 }
+
+SWAGGER link if you wish to use Browser for better readability - http://localhost:8181/swagger-ui.html#
+
+Project was done using Intellij
